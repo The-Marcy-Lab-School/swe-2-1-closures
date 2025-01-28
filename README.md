@@ -75,6 +75,15 @@ This function should create and return an "inner" function.
 * The inner function that is returned should return a different integer each time it is invoked, starting at `1` and incrementing each time it is invoked. 
 * This kind of function is used to generate unique number IDs for things.
 
+It should be able to be used like this:
+
+```js
+const idMaker = makeIdFunc();
+const firstId = idMaker(); // 1
+const secondId = idMaker(); // 2
+const thirdId = idMaker(); // 3
+```
+
 This is a *classic* closure example, check the tests for what we're expecting. And if you need a hint, check out this [article on closures from W3](https://www.w3schools.com/js/js_function_closures.asp).
 
 ## Question 2: sumOfMultiples
@@ -82,7 +91,7 @@ Let's get some `.reduce` practice. (No `for` loops allowed, use `.reduce`!).
 
 Write a function that returns the sum of all numbers that are multiples of the given factor. (Check the tests to see how we expect the function to behave!)
 
-> In Math, a number A is a "multiple" of another number B if the number A can be evenly divided by the number B. For example, 9 is a multiple of 3 because 9 can be divided by 3 with no remainder. We call the smaller number the "factor", as in "3 is a factor of 9".
+> In Math, a number `A` is a "multiple" of another number `B` if the number `A` can be evenly divided by the number `B`. For example, 9 is a multiple of 3 because 9 can be divided by 3 with no remainder. We call the smaller number the "factor", as in "3 is a factor of 9".
 
 It may not be obvious why this is utilizing closures, but it is! Think about how!
 
