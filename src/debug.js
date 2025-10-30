@@ -14,9 +14,9 @@ const createCourse = (topic, instructor) => {
     },
     getStudents() {
       return this.students;
-    }
-  }
-}
+    },
+  };
+};
 
 module.exports = {
   createCourse,
