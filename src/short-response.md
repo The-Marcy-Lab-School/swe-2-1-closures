@@ -47,7 +47,7 @@ Your response here...
 
 ## Prompt 3
 
-Consider the code snippet below showing a factory function for creating animal objects.
+Consider the code snippet below showing a factory function for creating animal objects. The `makeNoise` method is not working as intended:
 
 ```js
 const makeAnimal = (name, species, sound) => {
@@ -62,13 +62,17 @@ const makeAnimal = (name, species, sound) => {
 }
 
 const betty = makeAnimal('betty', 'cat', 'meow');
-betty.makeNoise(); // betty the cat says meow
+betty.makeNoise(); // undefined the undefined says meow
 
 const bugs = makeAnimal('bugs', 'bunny', 'whatsup doc');
-bugs.makeNoise(); // bugs the bunny says whatsup doc
+bugs.makeNoise(); // undefined the undefined says meow says whatsup doc
 ```
 
-First, define the `this` keyword in your own words and explain how this example demonstrates how it works.
+First, define the `this` keyword.
+
+Then, explain why the `makeNoise` method is not working (why are `this.name` and `this.species` returning `undefined`?).
+
+Finally, update the code snippet above to fix it.
 
 ### Response 3
 
