@@ -1,19 +1,29 @@
 # Short Responses
 
 For this short response assignment, aim to write a response with the following qualities (your instructor will give you feedback on these areas):
-- [] Is free of grammar and spelling mistakes (use grammarly!)
 - [] Addresses all parts of the prompt
-- [] Is easy to comprehend
 - [] Accurately uses relevant technical terminology
-- [] Uses markdown to enhance readability
+- [] Is free of grammar and spelling mistakes (double check with grammarly!)
+- [] Uses markdown to enhance readability (preview in VS Code with Command/Control + Shift + V)
+- [] Is easy to comprehend
 
-For each prompt below, write your response in the space provided. Aim to answer each prompt in 2-5 concise sentences.
+For each prompt below, write your response in the space provided. Aim to answer each prompt in 2-5 concise sentences. Make sure to preview your markdown to check how it is rendered before submitting.
 
-## Prompt 1
+## Question 1
+
+### Prompt 1
 
 What are the core principles of encapsulation in object-oriented programming?
 
-## Prompt 2
+### Response 2
+
+Your response here...
+
+---
+
+## Question 2
+
+### Prompt 1
 
 The code snippet below is an example of a **closure**.
 
@@ -26,6 +36,14 @@ const multiplesOfFive = multiplyNumsBy([1,2,3,4], 5); // [5, 10, 15, 20]
 ```
 
 First, define what a **closure** is in your own words and then explain how this example includes a closure.
+
+### Response 2
+
+Your response here...
+
+---
+
+## Question 3
 
 ## Prompt 3
 
@@ -51,3 +69,7 @@ bugs.makeNoise(); // bugs the bunny says whatsup doc
 ```
 
 First, define the `this` keyword in your own words and explain how this example demonstrates how it works.
+
+### Response 3
+
+Your response here...
