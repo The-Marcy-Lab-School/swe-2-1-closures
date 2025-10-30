@@ -1,139 +1,154 @@
 # Assignment
 
+- [Reminders](#reminders)
+  - [Asking ChatGPT for Help](#asking-chatgpt-for-help)
+  - [Be Okay With Being "Provisionally Complete"](#be-okay-with-being-provisionally-complete)
 - [Setup](#setup)
-- [Testing Your Code](#testing-your-code)
-  - [Submitting On Time](#submitting-on-time)
-  - [playground.js](#playgroundjs)
-  - [npm test](#npm-test)
 - [Before You Begin](#before-you-begin)
   - [More tests, less prompts](#more-tests-less-prompts)
-  - [Tickets](#tickets)
 - [Question 1: makeIdFunc](#question-1-makeidfunc)
 - [Question 2: sumOfMultiples](#question-2-sumofmultiples)
-- [Question 3: makeFriendList](#question-3-makefriendlist)
-- [Debug Tickets](#debug-tickets)
+- [Question 3: makeShoppingList](#question-3-makeshoppinglist)
+- [Debug](#debug)
 - [Good luck!](#good-luck)
+
+## Reminders
+
+### Asking ChatGPT for Help
+
+If you’re stuck, you may use ChatGPT to clarify the assignment — but not to solve it for you. To do this, copy the meta-prompt below into ChatGPT along with the assignment question.
+
+> You are acting as a tutor. Your job is to explain what this coding question is asking, clarify confusing wording, and highlight the relevant concepts students need to know — but do not provide the full solution or code that directly answers the question. Instead, focus on rephrasing the problem in simpler terms, identifying what’s being tested, and suggesting what steps or thought processes might help. Ask guiding questions to ensure the student is thinking critically. Do not write the final function, algorithm, or code implementation.
+
+Be mindful of your AI usage on assignments. AI can be a great tool to help your learning but it can also be detrimental if you let it do too much of the thinking for you.
+
+### Be Okay With Being "Provisionally Complete"
+
+At Marcy, we will deem an assignment as "complete" if the solution passes at least **75%** of the automated tests. 
+
+However, we know many of you will feel the urge to hold off on submitting until your assignment feels 100% perfect. That drive for excellence is an asset!
+
+But perfectionism can also get in the way of learning — especially when we need to cover a lot in a short amount of time.
+
+That’s why we encourage you to be comfortable with being **“provisionally complete.”** This means:
+
+- Submitting your work even if it isn’t perfect yet
+- Treating submission as a checkpoint, not a finish line
+- Committing to return, revise, and improve later
+
+Learning to move forward with provisional completeness will help you make steady progress while still building the habit of continuous improvement.
 
 ## Setup
 
-For guidance on setting up and submitting this assignment, refer to the Marcy lab School Docs How-To guide for [Working with Short Response and Coding Assignments](https://marcylabschool.gitbook.io/marcy-lab-school-docs/fullstack-curriculum/how-tos/working-with-assignments#how-to-work-on-assignments).
+For guidance on setting up and submitting this assignment, refer to the Marcy lab School Docs How-To guide for [Working with Short Response and Coding Assignments](https://marcylabschool.gitbook.io/marcy-lab-school-docs/how-tos/working-with-assignments#how-to-work-on-assignments).
 
-After cloning your repository, make sure to run the following commands:
-
-```sh
-npm i
-git checkout -b draft
-npm t
-```
-
-## Testing Your Code
-
-### Submitting On Time
-
-You have to understand that "grades" don't exist at Marcy. We only need performance data in order to know how you're doing, and make sure the people who need help get it as quickly as they can. It's ok if you didn't finish by the deadline! Just show us what you have. We'll have office hours and reviews, and we want to know what you are all struggling with so we can use those meetings effectively. **This is not about grades, its about seeing what you know, and where we can help!**
-
-### playground.js
-
-The most straightforward way to test your code is to test your code by hand as you work. Invoke your functions and use `console.log()` to print out the results. Then, `cd` into the `src/` directory and use the `node <file_name>` command to run your JavaScript files. 
-
-You can also create what's called a "playground" (or "sandbox") file where you import any code you need, and then mess around with that file. We've included one in the `src` directory so you can see it. Run that program using `node src/playground.js`.
-
-### npm test
-
-Before submitting your code, make sure you got things right by running the provided automated tests.
-
-You can do this using the commands:
+Here are some useful commands to remember.
 
 ```sh
+npm i                   # install dependencies
+git checkout -b draft   # switch to the draft branch before starting
+
 npm test # run the automated tests
 npm run test:w # run the automated tests and rerun them each time you save a change
+
+git add -A              # add a changed file to the staging area
+git commit -m 'message' # create a commit with the changes
+git push                # push the new commit to the remote repo
 ```
 
-You will know that you have "completed" an assignment once you have passed 75% or more of the automated tests!
-
 ## Before You Begin
-Welcome to Mod 5, Object-Oriented Programming (OOP)! To kick us off, this assignment is all about closures! But you may notice something's a little different about this assignment: it's so short! Where are the prompts??
+Welcome to Object-Oriented Programming (OOP)! To kick us off, this assignment is all about closures! But you may notice something's a little different about this assignment: it's so short! Where are the prompts??
 
 ### More tests, less prompts
+
 The fact is, you'll have to become fluent at reading the tests on the job. So start practicing now! We'll still give you brief explanations about what we're asking you to build, but edge cases and crucial information (like function signatures) will not be given to you anymore. Checking the tests is not optional anymore.
 
 It's challenging, but we know you can do it!
 
 We've tried to write easy to understand tests with Jest. But if you don't know what a "matcher" or "assertion" does, feel free to check online at `https://jestjs.io/docs/getting-started`.
 
-### Tickets
-We're also going to set up mock "tickets" for your debug or modify work. A ticket is basically a request for work. Tickets are how work is requested and tracked in most tech companies. You'll learn much more about them later, but at their core they have:
-  - name or number
-  - description
-  - status
-  - comments
-
-Your job is to use the tickets and tests to get the functions back to working order.
-
 ## Question 1: makeIdFunc
-This function should create and return an "inner" function. 
-* The inner function that is returned should return a different integer each time it is invoked, starting at `1` and incrementing each time it is invoked. 
-* This kind of function is used to generate unique number IDs for things.
 
-It should be able to be used like this:
+Create a higher-order function called `makeIdFunc` that returns an "inner" function with a closure. Here is what the returned inner function should do:
+* The first time it is invoked, it should return `1`
+* The second time it is invoked, it should return `2`
+* The third time it is invoked, it should return `3`
+* And so on...
+
+(This kind of function can be used to generate unique number IDs for things)
+
+Example Usage:
 
 ```js
-const idMaker = makeIdFunc();
-const firstId = idMaker(); // 1
-const secondId = idMaker(); // 2
-const thirdId = idMaker(); // 3
+const idMaker1 = makeIdFunc();
+const idMaker2 = makeIdFunc();
+
+console.log(idMaker1()); // 1
+console.log(idMaker1()); // 2
+console.log(idMaker1()); // 3
+
+console.log(idMaker2()); // 1
+console.log(idMaker2()); // 2
+console.log(idMaker2()); // 3
 ```
 
-This is a *classic* closure example, check the tests for what we're expecting. And if you need a hint, check out this [article on closures from W3](https://www.w3schools.com/js/js_function_closures.asp).
+This is a *classic* closure example, check the tests for what we're expecting.
 
 ## Question 2: sumOfMultiples
-Let's get some `.reduce` practice. (No `for` loops allowed, use `.reduce`!).
 
-Write a function that returns the sum of all numbers that are multiples of the given factor. (Check the tests to see how we expect the function to behave!)
+Write a function called `sumOfMultiples` that returns the sum of all numbers in the given array `nums`, but only for the numbers that are multiples of the given number `factor`.
 
-> In Math, a number `A` is a "multiple" of another number `B` if the number `A` can be evenly divided by the number `B`. For example, 9 is a multiple of 3 because 9 can be divided by 3 with no remainder. We call the smaller number the "factor", as in "3 is a factor of 9".
+No `for` loops allowed: use the appropriate array higher-order method! To pass the tests you cannot have `"for"` or `"while"` anywhere in your code (event comments).
 
-It may not be obvious why this is utilizing closures, but it is! Think about how!
+Example Usage:
 
-## Question 3: makeFriendList
-Ok, this is a fun one. Write a "factory" function called `makeFriendList`. 
-* It should return an object
-* It should use closure to encapsulate a private `friends` array of names (strings)
-* The returned object should have methods that act on the `friends` array.
+```js
+sumOfMultiples([1,2,3,4,5,6,7,8,9], 2); // returns 20 (2 + 4 + 6 + 8)
+sumOfMultiples([1,2,3,4,5,6,7,8,9], 3); // returns 18 (3 + 6 + 9)
+sumOfMultiples([1,2,3,4,5,6,7,8,9], 4); // returns 12 (4 + 8)
+```
+
+## Question 3: makeShoppingList
+
+Write a "factory" function called `makeShoppingList()`. 
+* It should return an object that lets you manage a shopping list
+* It should use closure to encapsulate a private `items` array of grocery items (strings)
+* The returned object should have methods that act on the `items` array.
 
 The methods we need are:
-  - `addFriend()`
-    - add a new friend
-  - `removeFriend()`
-    - find and remove an existing friend
-  - `getFriends()`
-    - return an array of friends
-  - `displayFriends()`
-    - log a specially formatted message
+  - `getItems()`
+    - return a copy of the list
+  - `addItem(item)`
+    - add a new shopping cart item (a string), prints a message, and return the new length of the list
+  - `removeItem(item)`
+    - find and remove an existing item (look for the matching item), prints a message, and returns either `true` or `false` depending on whether or not the value was removed.
 
-What should they return? What args do they take? Check those tests!
+## Debug
 
-## Debug Tickets
+In the `debug.js` file, you can see the following factory function `createCourse` that creates an object for managing a course and student roster:
 
-| Ticket          | Name                                                                                                                                                                                                                |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| DBG-312         | Fix broken createCourse please                                                                                                                                                                                      |
-| **Description** | We were looking at the API yesterday to prep for the deploy and it looks like we've exposed the student data in the `createCourse` function. Please restore functionality ASAP so we can deploy. This is a blocker! |
-| **priority**    | High                                                                                                                                                                                                                |
-| **Status**      | Open                                                                                                                                                                                                                |
-| **Assignee**    | YOU!                                                                                                                                                                                                                |
+```js
+const createCourse = (topic, instructor) => {
+  return {
+    topic,
+    instructor,
+    students: [],
+    addStudent(name) {
+      this.students.push(name);
+    },
+    removeStudent(name) {
+      this.students.splice(this.students.indexOf(name), 1);
+    },
+    getStudents() {
+      return this.students;
+    }
+  }
+}
+```
 
-And then the comments would look something like:
+As you can see from the tests, this function produces objects with the correct functionality, but it exposes the `students` array which we want to be private. Refactor the code such that it uses a closure to encapsulate the `students` array and prevent it from being accessed. 
 
-| Commenter | Message                                                                                                          |
-| --------- | ---------------------------------------------------------------------------------------------------------------- |
-| Dean SE2  | Just checked into it, one of the new devs blew away changes with a rebase. It looks like the closure was removed |
-| Jane SE3  | Yeah, it looks like the rest of the function logic is mostly okay though.                                        |
-| Jo SE2    | They are passing most of the tests for functionality but they are failing the tests for privacy.                 |
-| Jane SE3  | Ah gotcha. Can someone pick this up?                                                                             |
-| **YOU**   | On it!                                                                                                           |
-
-Notice how there's a little too much info? Getting good at reading tickets is filtering out the less important parts! In the real world, there may not be perfect tests, so you may need to ask questions about exactly the desired behavior. However, here all you have to do is get the tests to pass in `debug.spec.js` as usual!
+Use the provided tests to ensure that your code meets the requirements!
 
 ## Good luck!
 This is definitely a step up, but you can do it!

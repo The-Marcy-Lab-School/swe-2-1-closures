@@ -2,7 +2,7 @@ const path = require('path');
 const ScoreCounter = require('score-tests');
 const {
   makeIdFunc,
-  makeFriendList,
+  makeShoppingList,
   sumOfMultiples,
 } = require('../src/from-scratch');
 
@@ -17,14 +17,14 @@ describe(testSuiteName, () => {
     console.log.mockClear();
   });
 
-  it('makeIdFunc - starts on 1', () => {
+  test('makeIdFunc - starts on 1', () => {
     const getId = makeIdFunc();
     expect(getId()).toBe(1);
 
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
 
-  it('makeIdFunc - increments counter by 1', () => {
+  test('makeIdFunc - increments counter by 1', () => {
     const getId = makeIdFunc();
     expect(getId()).toBe(1);
     expect(getId()).toBe(2);
@@ -35,7 +35,7 @@ describe(testSuiteName, () => {
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
 
-  it('makeIdFunc - Each new call of the function starts back at 1', () => {
+  test('makeIdFunc - Each new call of the function starts back at 1', () => {
     const getId1 = makeIdFunc();
     expect(getId1()).toBe(1);
     expect(getId1()).toBe(2);
@@ -54,9 +54,8 @@ describe(testSuiteName, () => {
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
 
-  it('sumOfMultiples - returns the sum of all numbers in the array that are multiples of the given factor', () => {
-
-    const arr1 = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  test('sumOfMultiples - returns the sum of all numbers in the array that are multiples of the given factor', () => {
+    const arr1 = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     const factor1 = 3;
     expect(sumOfMultiples(arr1, factor1)).toBe(18);
     // 3 + 6 + 9 === 18
@@ -72,23 +71,26 @@ describe(testSuiteName, () => {
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
 
-  it('sumOfMultiples - returns null if the given multiple is 0', () => {
+  test('sumOfMultiples - returns null if the given multiple is 0', () => {
     expect(sumOfMultiples([1, 2, 3], 0)).toBeNull();
 
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
 
-  it('sumOfMultiples - returns 0 if no multiples are found, or no numbers array is empty', () => {
+  test('sumOfMultiples - returns 0 if no multiples are found, or the numbers array is empty', () => {
     expect(sumOfMultiples([1, 2, 3], 12)).toBe(0);
     expect(sumOfMultiples([], 4)).toBe(0);
 
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
 
-  it('sumOfMultiples - uses reduce and not a for loop', () => {
-    const sumOfMultiplesStr = sumOfMultiples.toString();
-    expect(sumOfMultiplesStr.includes('for')).toBe(false);
-    expect(sumOfMultiplesStr.includes('reduce')).toBe(true);
+  test('sumOfMultiples - uses the correct higher-order method and not a for or while loop', () => {
+    const functionContentString = sumOfMultiples.toString();
+    // Check that the function does not use a for or while loop
+    // Remove comments that contain for or while!
+    expect(functionContentString).not.toContain('for');
+    expect(functionContentString).not.toContain('while');
+    expect(functionContentString).toContain('reduce');
 
     // test copies to prevent auto pass
     expect(sumOfMultiples([1, 2, 3], 4)).toBe(0);
@@ -97,195 +99,144 @@ describe(testSuiteName, () => {
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
 
-  it('makeFriendList - returns an object', () => {
-    const friendDataObj = makeFriendList();
-    expect(friendDataObj).toBeInstanceOf(Object);
+  test('makeShoppingList - returns an object', () => {
+    const shoppingList = makeShoppingList();
+    expect(typeof shoppingList).toBe('object');
 
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
 
-  it('makeFriendList.getFriends - is a function that returns an array', () => {
-    const friendDataObj = makeFriendList();
+  test('makeShoppingList.getItems - is a function that returns an array', () => {
+    const shoppingList = makeShoppingList();
 
-    //  The returned array should be empty if no friends have been added)
-    expect(friendDataObj.getFriends()).toEqual([]);
-
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
-
-  it('makeFriendList.addFriend - adds a friend to the friends array and returns the new length of the array', () => {
-    const friendDataObj = makeFriendList();
-
-    const bob = 'Bob'; // storing the name in a variable to avoid typos
-    expect(friendDataObj.addFriend(bob)).toBe(1);
-    expect(friendDataObj.getFriends()).toEqual([bob]);
-
-    const alice = 'Alice';
-    expect(friendDataObj.addFriend(alice)).toBe(2);
-    expect(friendDataObj.getFriends()).toEqual([bob, alice]);
-
-    const charlie = 'Charlie';
-    expect(friendDataObj.addFriend(charlie)).toBe(3);
-    expect(friendDataObj.getFriends()).toEqual([bob, alice, charlie]);
+    //  The returned array should be empty if no items have been added)
+    expect(shoppingList.getItems()).toEqual([]);
 
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
 
-  it('makeFriendList.addFriend - logs the right message when adding a friend', () => {
-    const friendDataObj = makeFriendList();
-    const bob = 'Bob';
-    friendDataObj.addFriend(bob);
-    expect(log).lastCalledWith(`${bob} successfully added!`);
+  test('makeShoppingList.getItems - always returns a copy of the items array', () => {
+    const shoppingList = makeShoppingList();
+    const items1 = shoppingList.getItems();
+    const items2 = shoppingList.getItems();
 
-    const alice = 'Alice';
-    friendDataObj.addFriend(alice);
-    expect(log).lastCalledWith(`${alice} successfully added!`);
-
-    const charlie = 'Charlie';
-    friendDataObj.addFriend(charlie);
-    expect(log).lastCalledWith(`${charlie} successfully added!`);
+    // getItems should always return a new copy of the items array, not the same array
+    expect(items1 === items2).toBeFalsy();
 
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
 
-  it('makeFriendList.getFriends - adding friends adds them to the tail of the array', () => {
-    const friendDataObj = makeFriendList();
-    const bob = 'Bob';
-    friendDataObj.addFriend(bob);
-    expect(friendDataObj.getFriends()).toEqual([bob]);
+  test('makeShoppingList.addItem - adds an item to the items array and returns the new length of the array', () => {
+    const shoppingList = makeShoppingList();
 
-    const alice = 'Alice';
-    friendDataObj.addFriend(alice);
-    expect(friendDataObj.getFriends()).toEqual([bob, alice]);
+    const banana = 'Banana'; // storing the name in a variable to avoid typos
+    const apple = 'Apple';
+    const carrot = 'Carrot';
 
-    const charlie = 'Charlie';
-    friendDataObj.addFriend(charlie);
-    expect(friendDataObj.getFriends()).toEqual([bob, alice, charlie]);
+    expect(shoppingList.addItem(banana)).toBe(1);
+    expect(shoppingList.getItems()).toEqual([banana]);
 
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
+    expect(shoppingList.addItem(apple)).toBe(2);
+    expect(shoppingList.getItems()).toEqual([banana, apple]);
 
-  it('makeFriendList.removeFriend - removes a friend from the friends array and returns the removed friend', () => {
-    const friendDataObj = makeFriendList();
-    const bob = 'Bob';
-    friendDataObj.addFriend(bob);
-    const alice = 'Alice';
-    friendDataObj.addFriend(alice);
-    const charlie = 'Charlie';
-    friendDataObj.addFriend(charlie);
-
-    expect(friendDataObj.removeFriend(alice)).toBe(alice);
-    expect(friendDataObj.getFriends()).toEqual([bob, charlie]);
-
-    expect(friendDataObj.removeFriend(bob)).toBe(bob);
-    expect(friendDataObj.getFriends()).toEqual([charlie]);
-
-    expect(friendDataObj.removeFriend(charlie)).toBe(charlie);
-    expect(friendDataObj.getFriends()).toEqual([]);
+    expect(shoppingList.addItem(carrot)).toBe(3);
+    expect(shoppingList.getItems()).toEqual([banana, apple, carrot]);
 
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
 
-  it('makeFriendList.removeFriend - logs the right message', () => {
-    const friendDataObj = makeFriendList();
-    const bob = 'Bob';
-    friendDataObj.addFriend(bob);
-    friendDataObj.removeFriend(bob);
-    expect(log).lastCalledWith(`${bob} successfully removed.`);
+  test('makeShoppingList.addItem - logs the right message when adding an item', () => {
+    const shoppingList = makeShoppingList();
+    const banana = 'Banana';
+    const apple = 'Apple';
+    const carrot = 'Carrot';
 
-    const ben = 'Ben';
-    friendDataObj.addFriend(ben);
-    friendDataObj.removeFriend(ben);
-    expect(log).lastCalledWith(`${ben} successfully removed.`);
+    shoppingList.addItem(banana);
+    expect(log).lastCalledWith(`${banana} successfully added!`);
+
+    shoppingList.addItem(apple);
+    expect(log).lastCalledWith(`${apple} successfully added!`);
+
+    shoppingList.addItem(carrot);
+    expect(log).lastCalledWith(`${carrot} successfully added!`);
 
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
 
-  it('makeFriendList.removeFriend - logs the right message if a friend does not exist and returns undefined', () => {
-    const friendDataObj = makeFriendList();
+  test('makeShoppingList.removeItem - removes an item from the items array and returns true', () => {
+    const shoppingList = makeShoppingList();
+    const banana = 'Banana';
+    shoppingList.addItem(banana);
+    const apple = 'Apple';
+    shoppingList.addItem(apple);
+    const carrot = 'Carrot';
+    shoppingList.addItem(carrot);
+
+    expect(shoppingList.removeItem(apple)).toBe(true);
+    expect(shoppingList.getItems()).toEqual([banana, carrot]);
+
+    expect(shoppingList.removeItem(banana)).toBe(true);
+    expect(shoppingList.getItems()).toEqual([carrot]);
+
+    expect(shoppingList.removeItem(carrot)).toBe(true);
+    expect(shoppingList.getItems()).toEqual([]);
+
+    scoreCounter.correct(expect); // DO NOT TOUCH
+  });
+
+  test('makeShoppingList.removeItem - logs the right message when removing an item in the list that exists', () => {
+    const shoppingList = makeShoppingList();
+    const banana = 'Banana';
+    shoppingList.addItem(banana);
+    shoppingList.removeItem(banana);
+    expect(log).lastCalledWith(`${banana} successfully removed.`);
+
+    const date = 'Date';
+    shoppingList.addItem(date);
+    shoppingList.removeItem(date);
+    expect(log).lastCalledWith(`${date} successfully removed.`);
+
+    scoreCounter.correct(expect); // DO NOT TOUCH
+  });
+
+  test('makeShoppingList.removeItem - logs the right message if an item does not exist and returns false', () => {
+    const shoppingList = makeShoppingList();
 
     const dennis = 'Dennis';
-    expect(friendDataObj.removeFriend(dennis)).toBe(undefined);
+    expect(shoppingList.removeItem(dennis)).toBe(false);
     expect(log).lastCalledWith(`${dennis} not found.`);
 
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
 
-  it('makeFriendList.displayFriends - logs the right message for no friends', () => {
-    const friendDataObj = makeFriendList();
-
-    friendDataObj.displayFriends();
-    expect(log).lastCalledWith('You have not added any friends.');
-
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
-
-  it('makeFriendList.displayFriends - logs the right message for 1 friend', () => {
-    const friendDataObj = makeFriendList();
-
-    friendDataObj.displayFriends();
-    expect(log).lastCalledWith('You have not added any friends.');
-
-    const bob = 'Bob';
-    friendDataObj.addFriend(bob);
-    friendDataObj.displayFriends();
-    expect(log).lastCalledWith(`${bob} is your friend.`);
-
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
-
-  it('makeFriendList.displayFriends - logs a message with proper oxford comma, and correct use of "and"', () => {
-    const friendDataObj = makeFriendList();
-
-    const bob = 'Bob';
-    const alice = 'Alice';
-    friendDataObj.addFriend(bob);
-    friendDataObj.addFriend(alice);
-
-    friendDataObj.displayFriends();
-    expect(log).lastCalledWith(`${bob} and ${alice} are your friends.`);
-
-    const charlie = 'Charlie';
-    friendDataObj.addFriend(charlie);
-    friendDataObj.displayFriends();
-    expect(log).lastCalledWith(`${bob}, ${alice}, and ${charlie} are your friends.`);
-
-    const dennis = 'Dennis';
-    friendDataObj.addFriend(dennis);
-    friendDataObj.displayFriends();
-    expect(log).lastCalledWith(`${bob}, ${alice}, ${charlie}, and ${dennis} are your friends.`);
-
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
-
-  it('makeFriendList - does not expose internal friends array', () => {
-    const friendDataObj = makeFriendList();
-    expect(friendDataObj.friends).toBe(undefined);
+  test('makeShoppingList - does not expose internal items array', () => {
+    const shoppingList = makeShoppingList();
+    expect(shoppingList.items).toBeUndefined();
 
     // only the specified methods should be available
-    expect(Object.keys(friendDataObj).length).toBe(4);
-    expect(friendDataObj.getFriends).toBeInstanceOf(Function);
-    expect(friendDataObj.addFriend).toBeInstanceOf(Function);
-    expect(friendDataObj.removeFriend).toBeInstanceOf(Function);
-    expect(friendDataObj.displayFriends).toBeInstanceOf(Function);
+    expect(Object.keys(shoppingList).length).toBe(3);
+
+    expect(typeof shoppingList.addItem).toBe('function');
+    expect(typeof shoppingList.removeItem).toBe('function');
+    expect(typeof shoppingList.getItems).toBe('function');
 
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
 
-  it('makeFriendList - is not possible to manipulate the internal friends array from outside the object', () => {
-    const friendDataObj = makeFriendList();
+  test('makeShoppingList - is not possible to manipulate the internal items array from outside the object', () => {
+    const shoppingList = makeShoppingList();
 
     const gene = 'Gene';
-    friendDataObj.addFriend(gene);
+    shoppingList.addItem(gene);
 
-    const outsideFriends = friendDataObj.getFriends();
-    expect(friendDataObj.getFriends()).toEqual([gene]);
+    const outsideitems = shoppingList.getItems();
+    expect(shoppingList.getItems()).toEqual([gene]);
 
-    outsideFriends.push('Zo');
-    expect(friendDataObj.getFriends()).toEqual([gene]);
+    outsideitems.push('Zo');
+    expect(shoppingList.getItems()).toEqual([gene]);
 
-    outsideFriends.length = 0;
-    expect(friendDataObj.getFriends()).toEqual([gene]);
+    outsideitems.length = 0;
+    expect(shoppingList.getItems()).toEqual([gene]);
 
     scoreCounter.correct(expect); // DO NOT TOUCH
   });

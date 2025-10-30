@@ -1,16 +1,16 @@
 const makeIdFunc = () => {
 };
 
-const sumOfMultiples = () => {
+const sumOfMultiples = (nums, factor) => {
 
 };
 
-const makeFriendList = () => {
+const makeShoppingList = () => {
 
 };
 
 module.exports = {
   makeIdFunc,
-  makeFriendList,
   sumOfMultiples,
+  makeShoppingList,
 };
