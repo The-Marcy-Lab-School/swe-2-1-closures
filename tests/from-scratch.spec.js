@@ -152,13 +152,13 @@ describe(testSuiteName, () => {
     const carrot = 'Carrot';
 
     shoppingList.addItem(banana);
-    expect(log).lastCalledWith(`${banana} successfully added!`);
+    expect(log).lastCalledWith(`${banana} successfully added! Now you have 1 item(s).`);
 
     shoppingList.addItem(apple);
-    expect(log).lastCalledWith(`${apple} successfully added!`);
+    expect(log).lastCalledWith(`${apple} successfully added! Now you have 2 item(s).`);
 
     shoppingList.addItem(carrot);
-    expect(log).lastCalledWith(`${carrot} successfully added!`);
+    expect(log).lastCalledWith(`${carrot} successfully added! Now you have 3 item(s).`);
 
     scoreCounter.correct(expect); // DO NOT TOUCH
   });
@@ -189,12 +189,12 @@ describe(testSuiteName, () => {
     const banana = 'Banana';
     shoppingList.addItem(banana);
     shoppingList.removeItem(banana);
-    expect(log).lastCalledWith(`${banana} successfully removed.`);
+    expect(log).lastCalledWith(`${banana} successfully removed. You now have 1 item(s).`);
 
     const date = 'Date';
     shoppingList.addItem(date);
     shoppingList.removeItem(date);
-    expect(log).lastCalledWith(`${date} successfully removed.`);
+    expect(log).lastCalledWith(`${date} successfully removed. You now have 0 item(s).`);
 
     scoreCounter.correct(expect); // DO NOT TOUCH
   });

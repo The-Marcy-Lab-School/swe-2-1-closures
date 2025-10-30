@@ -4,11 +4,11 @@
   - [Asking ChatGPT for Help](#asking-chatgpt-for-help)
   - [Be Okay With Being "Provisionally Complete"](#be-okay-with-being-provisionally-complete)
 - [Setup](#setup)
-- [Before You Begin](#before-you-begin)
-  - [More tests, less prompts](#more-tests-less-prompts)
-- [Question 1: makeIdFunc](#question-1-makeidfunc)
-- [Question 2: sumOfMultiples](#question-2-sumofmultiples)
-- [Question 3: makeShoppingList](#question-3-makeshoppinglist)
+- [Short Response Questions](#short-response-questions)
+- [From Scratch](#from-scratch)
+  - [Question 1: makeIdFunc](#question-1-makeidfunc)
+  - [Question 2: sumOfMultiples](#question-2-sumofmultiples)
+  - [Question 3: makeShoppingList](#question-3-makeshoppinglist)
 - [Debug](#debug)
 - [Good luck!](#good-luck)
 
@@ -56,18 +56,13 @@ git commit -m 'message' # create a commit with the changes
 git push                # push the new commit to the remote repo
 ```
 
-## Before You Begin
-Welcome to Object-Oriented Programming (OOP)! To kick us off, this assignment is all about closures! But you may notice something's a little different about this assignment: it's so short! Where are the prompts??
+## Short Response Questions
 
-### More tests, less prompts
+Short response questions can be found in the `src/short-response.md` file. Write your responses directly in that file! Do not forget to complete this part of the assignment.
 
-The fact is, you'll have to become fluent at reading the tests on the job. So start practicing now! We'll still give you brief explanations about what we're asking you to build, but edge cases and crucial information (like function signatures) will not be given to you anymore. Checking the tests is not optional anymore.
+## From Scratch
 
-It's challenging, but we know you can do it!
-
-We've tried to write easy to understand tests with Jest. But if you don't know what a "matcher" or "assertion" does, feel free to check online at `https://jestjs.io/docs/getting-started`.
-
-## Question 1: makeIdFunc
+### Question 1: makeIdFunc
 
 Create a higher-order function called `makeIdFunc` that returns an "inner" function with a closure. Here is what the returned inner function should do:
 * The first time it is invoked, it should return `1`
@@ -94,7 +89,7 @@ console.log(idMaker2()); // 3
 
 This is a *classic* closure example, check the tests for what we're expecting.
 
-## Question 2: sumOfMultiples
+### Question 2: sumOfMultiples
 
 Write a function called `sumOfMultiples` that returns the sum of all numbers in the given array `nums`, but only for the numbers that are multiples of the given number `factor`.
 
@@ -108,7 +103,7 @@ sumOfMultiples([1,2,3,4,5,6,7,8,9], 3); // returns 18 (3 + 6 + 9)
 sumOfMultiples([1,2,3,4,5,6,7,8,9], 4); // returns 12 (4 + 8)
 ```
 
-## Question 3: makeShoppingList
+### Question 3: makeShoppingList
 
 Write a "factory" function called `makeShoppingList()`. 
 * It should return an object that lets you manage a shopping list
@@ -123,9 +118,29 @@ The methods we need are:
   - `removeItem(item)`
     - find and remove an existing item (look for the matching item), prints a message, and returns either `true` or `false` depending on whether or not the value was removed.
 
+Example Usage:
+
+```js
+const myList = makeShoppingList();
+
+console.log(myList.getItems()); // []
+
+myList.addItem('eggs'); // prints "eggs successfully added! Now you have 1 item(s)."
+myList.addItem('milk'); // prints "milk successfully added! Now you have 2 item(s)."
+myList.addItem('bread'); // prints "bread successfully added! Now you have 3 item(s)."
+
+console.log(myList.getItems()); // ['eggs', 'milk', 'bread']
+
+myList.removeItem('milk'); // prints "milk successfully removed. You now have 2 item(s).
+console.log(myList.getItems()); // ['eggs', 'bread']
+
+const wasRemoved = myList.removeItem('apples'); // prints "apples not found."
+console.log(wasRemoved); // false
+```
+
 ## Debug
 
-In the `debug.js` file, you can see the following factory function `createCourse` that creates an object for managing a course and student roster:
+In the `src/debug.js` file, you can see the following factory function `createCourse` that creates an object for managing a course and student roster:
 
 ```js
 const createCourse = (topic, instructor) => {
