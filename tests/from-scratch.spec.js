@@ -2,8 +2,11 @@ const path = require('path');
 const ScoreCounter = require('score-tests');
 const {
   makeIdFunc,
+  makePasswordChecker,
+  makeMultiplier,
+  makeFilterByLength,
+  makeGradeTracker,
   makeShoppingList,
-  sumOfMultiples,
 } = require('../src/from-scratch');
 
 const testSuiteName = 'From Scratch Tests';
@@ -17,228 +20,234 @@ describe(testSuiteName, () => {
     console.log.mockClear();
   });
 
-  test('makeIdFunc - starts on 1', () => {
-    const getId = makeIdFunc();
-    expect(getId()).toBe(1);
+  describe('makeIdFunc', () => {
+    test('Each new call of the function starts back at 1', () => {
+      const getId1 = makeIdFunc();
+      expect(getId1()).toBe(1);
+      expect(getId1()).toBe(2);
+      expect(getId1()).toBe(3);
 
-    scoreCounter.correct(expect); // DO NOT TOUCH
+      const getId2 = makeIdFunc();
+      expect(getId2()).toBe(1);
+      expect(getId2()).toBe(2);
+      expect(getId2()).toBe(3);
+
+      const getId3 = makeIdFunc();
+      expect(getId3()).toBe(1);
+      expect(getId3()).toBe(2);
+      expect(getId3()).toBe(3);
+
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
+
+    test('increments counter by 1', () => {
+      const getId = makeIdFunc();
+      expect(getId()).toBe(1);
+      expect(getId()).toBe(2);
+      expect(getId()).toBe(3);
+      expect(getId()).toBe(4);
+      expect(getId()).toBe(5);
+
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
   });
 
-  test('makeIdFunc - increments counter by 1', () => {
-    const getId = makeIdFunc();
-    expect(getId()).toBe(1);
-    expect(getId()).toBe(2);
-    expect(getId()).toBe(3);
-    expect(getId()).toBe(4);
-    expect(getId()).toBe(5);
-
-    scoreCounter.correct(expect); // DO NOT TOUCH
+  describe('makePasswordChecker', () => {
+    test('returns the correct boolean based on the guess', () => {
+      const checkPassword = makePasswordChecker('secret123');
+      expect(checkPassword('secret123')).toBe(true);
+      expect(checkPassword('wrong')).toBe(false);
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
+    test('returns Account Locked after 3 failed attempts', () => {
+      const checkPassword = makePasswordChecker('secret123');
+      expect(checkPassword('nope')).toBe(false);
+      expect(checkPassword('nope')).toBe(false);
+      expect(checkPassword('nope')).toBe(false);
+      expect(checkPassword('secret123')).toBe('Account locked');
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
   });
 
-  test('makeIdFunc - Each new call of the function starts back at 1', () => {
-    const getId1 = makeIdFunc();
-    expect(getId1()).toBe(1);
-    expect(getId1()).toBe(2);
-    expect(getId1()).toBe(3);
-
-    const getId2 = makeIdFunc();
-    expect(getId2()).toBe(1);
-    expect(getId2()).toBe(2);
-    expect(getId2()).toBe(3);
-
-    const getId3 = makeIdFunc();
-    expect(getId3()).toBe(1);
-    expect(getId3()).toBe(2);
-    expect(getId3()).toBe(3);
-
-    scoreCounter.correct(expect); // DO NOT TOUCH
+  describe('makeMultiplier', () => {
+    test('returns the correct array with the numbers multiplied by the multiplier', () => {
+      const double = makeMultiplier(2);
+      expect(double([1, 2, 3, 4])).toEqual([2, 4, 6, 8]);
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
+    test('returns the correct array with the numbers multiplied by the multiplier', () => {
+      const double = makeMultiplier(2);
+      expect(double([1, 2, 3, 4])).toEqual([2, 4, 6, 8]);
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
   });
 
-  test('sumOfMultiples - returns the sum of all numbers in the array that are multiples of the given factor', () => {
-    const arr1 = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    const factor1 = 3;
-    expect(sumOfMultiples(arr1, factor1)).toBe(18);
-    // 3 + 6 + 9 === 18
+  describe('makeFilterByLength', () => {
+    test('makeFilterByLength - returns a function that filters an array of strings by length', () => {
+      const shorterThan5 = makeFilterByLength(5);
+      const fruits = ['apple', 'banana', 'cherry', 'date'];
+      expect(shorterThan5(fruits)).toEqual(['apple', 'date']);
+      expect(shorterThan5(['aaaaaaa', 'bbbb', 'ccc'])).toEqual(['bbbb', 'ccc']);
 
-    const factor2 = 2;
-    expect(sumOfMultiples(arr1, factor2)).toBe(20);
-    // 2 + 4 + 6 + 8 === 20
+      const shorterThan10 = makeFilterByLength(10);
+      expect(shorterThan10(fruits)).toEqual(['apple', 'banana', 'cherry', 'date']);
 
-    expect(sumOfMultiples([9, 9, 9], 9)).toBe(27);
-    expect(sumOfMultiples([1, 4, 3], 1)).toBe(8);
-    expect(sumOfMultiples([1, 4, 1, 3, 13], 2)).toBe(4);
+      const noWords = makeFilterByLength(0);
+      expect(noWords(fruits)).toEqual([]);
 
-    scoreCounter.correct(expect); // DO NOT TOUCH
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
   });
 
-  test('sumOfMultiples - returns null if the given multiple is 0', () => {
-    expect(sumOfMultiples([1, 2, 3], 0)).toBeNull();
+  describe('makeGradeTracker', () => {
+    test('returns an object', () => {
+      const studentGrades = makeGradeTracker();
+      expect(typeof studentGrades).toBe('object');
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
 
-    scoreCounter.correct(expect); // DO NOT TOUCH
+    test('.addGrade - adds a grade to the grades array and returns the number of grades in the list', () => {
+      const studentGrades = makeGradeTracker();
+      expect(studentGrades.addGrade(85)).toBe(true);
+      expect(studentGrades.addGrade(85.5)).toBe(true);
+      expect(studentGrades.addGrade(0)).toBe(true);
+      expect(studentGrades.addGrade(100)).toBe(true);
+
+      // invalid grades should return false
+      expect(studentGrades.addGrade(105)).toBe(false);
+      expect(studentGrades.addGrade(-5)).toBe(false);
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
+
+    test('.getAverage - returns the average of all grades in the list', () => {
+      const studentGrades = makeGradeTracker();
+      // if there are no grades, the average should be 0 (not NaN)
+      expect(studentGrades.getAverage()).toBe(0);
+
+      studentGrades.addGrade(1);
+      expect(studentGrades.getAverage()).toBeCloseTo(1);
+      studentGrades.addGrade(3);
+      expect(studentGrades.getAverage()).toBeCloseTo(2);
+      studentGrades.addGrade(8);
+      expect(studentGrades.getAverage()).toBeCloseTo(4);
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
+
+    test('.getAverage - does not expose the grades array', () => {
+      const studentGrades = makeGradeTracker();
+      expect(studentGrades.grades).toBeUndefined();
+
+      // only the specified methods should be available
+      expect(Object.keys(studentGrades)).toEqual(['addGrade', 'getAverage']);
+
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
   });
 
-  test('sumOfMultiples - returns 0 if no multiples are found, or the numbers array is empty', () => {
-    expect(sumOfMultiples([1, 2, 3], 12)).toBe(0);
-    expect(sumOfMultiples([], 4)).toBe(0);
+  describe('makeShoppingList', () => {
+    test('returns an object', () => {
+      const shoppingList = makeShoppingList();
+      expect(typeof shoppingList).toBe('object');
 
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
 
-  test('sumOfMultiples - uses the correct higher-order method and not a for or while loop', () => {
-    const functionContentString = sumOfMultiples.toString();
-    // Check that the function does not use a for or while loop
-    // Remove comments that contain for or while!
-    expect(functionContentString).not.toContain('for');
-    expect(functionContentString).not.toContain('while');
-    expect(functionContentString).toContain('reduce');
+    test('.getItems - is a function that returns an array', () => {
+      const shoppingList = makeShoppingList();
 
-    // test copies to prevent auto pass
-    expect(sumOfMultiples([1, 2, 3], 4)).toBe(0);
-    expect(sumOfMultiples([], 4)).toBe(0);
+      //  The returned array should be empty if no items have been added)
+      expect(shoppingList.getItems()).toEqual([]);
 
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
 
-  test('makeShoppingList - returns an object', () => {
-    const shoppingList = makeShoppingList();
-    expect(typeof shoppingList).toBe('object');
+    test('.getItems - always returns a copy of the items array', () => {
+      const shoppingList = makeShoppingList();
+      const items1 = shoppingList.getItems();
+      const items2 = shoppingList.getItems();
 
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
+      // getItems should always return a new copy of the items array, not the same array
+      expect(items1 === items2).toBeFalsy();
 
-  test('makeShoppingList.getItems - is a function that returns an array', () => {
-    const shoppingList = makeShoppingList();
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
 
-    //  The returned array should be empty if no items have been added)
-    expect(shoppingList.getItems()).toEqual([]);
+    test('.addItem - adds an item to the items array, returns the new length of the array, and logs the right message', () => {
+      const shoppingList = makeShoppingList();
 
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
+      const banana = 'Banana'; // storing the name in a variable to avoid typos
+      const apple = 'Apple';
+      const carrot = 'Carrot';
 
-  test('makeShoppingList.getItems - always returns a copy of the items array', () => {
-    const shoppingList = makeShoppingList();
-    const items1 = shoppingList.getItems();
-    const items2 = shoppingList.getItems();
+      expect(shoppingList.addItem(banana)).toBe(1);
+      expect(shoppingList.getItems()).toEqual([banana]);
+      expect(log).lastCalledWith(`${banana} successfully added! Now you have 1 item(s).`);
 
-    // getItems should always return a new copy of the items array, not the same array
-    expect(items1 === items2).toBeFalsy();
+      expect(shoppingList.addItem(apple)).toBe(2);
+      expect(shoppingList.getItems()).toEqual([banana, apple]);
+      expect(log).lastCalledWith(`${apple} successfully added! Now you have 2 item(s).`);
 
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
+      expect(shoppingList.addItem(carrot)).toBe(3);
+      expect(shoppingList.getItems()).toEqual([banana, apple, carrot]);
+      expect(log).lastCalledWith(`${carrot} successfully added! Now you have 3 item(s).`);
 
-  test('makeShoppingList.addItem - adds an item to the items array and returns the new length of the array', () => {
-    const shoppingList = makeShoppingList();
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
 
-    const banana = 'Banana'; // storing the name in a variable to avoid typos
-    const apple = 'Apple';
-    const carrot = 'Carrot';
+    test('.removeItem - removes an item from the items array, returns true, and logs the right message', () => {
+      const shoppingList = makeShoppingList();
+      const banana = 'Banana';
+      shoppingList.addItem(banana);
+      const apple = 'Apple';
+      shoppingList.addItem(apple);
+      const carrot = 'Carrot';
+      shoppingList.addItem(carrot);
 
-    expect(shoppingList.addItem(banana)).toBe(1);
-    expect(shoppingList.getItems()).toEqual([banana]);
+      expect(shoppingList.removeItem(apple)).toBe(true);
+      expect(shoppingList.getItems()).toEqual([banana, carrot]);
+      expect(log).lastCalledWith(`${apple} successfully removed. You now have 2 item(s).`);
 
-    expect(shoppingList.addItem(apple)).toBe(2);
-    expect(shoppingList.getItems()).toEqual([banana, apple]);
+      expect(shoppingList.removeItem(banana)).toBe(true);
+      expect(shoppingList.getItems()).toEqual([carrot]);
+      expect(log).lastCalledWith(`${banana} successfully removed. You now have 1 item(s).`);
 
-    expect(shoppingList.addItem(carrot)).toBe(3);
-    expect(shoppingList.getItems()).toEqual([banana, apple, carrot]);
+      expect(shoppingList.removeItem(carrot)).toBe(true);
+      expect(shoppingList.getItems()).toEqual([]);
+      expect(log).lastCalledWith(`${carrot} successfully removed. You now have 0 item(s).`);
 
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
+      const date = 'Date';
+      expect(shoppingList.removeItem(date)).toBe(false);
+      expect(log).lastCalledWith(`${date} not found.`);
 
-  test('makeShoppingList.addItem - logs the right message when adding an item', () => {
-    const shoppingList = makeShoppingList();
-    const banana = 'Banana';
-    const apple = 'Apple';
-    const carrot = 'Carrot';
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
 
-    shoppingList.addItem(banana);
-    expect(log).lastCalledWith(`${banana} successfully added! Now you have 1 item(s).`);
+    test('makeShoppingList - does not expose internal items array', () => {
+      const shoppingList = makeShoppingList();
+      expect(shoppingList.items).toBeUndefined();
 
-    shoppingList.addItem(apple);
-    expect(log).lastCalledWith(`${apple} successfully added! Now you have 2 item(s).`);
+      // You cannot mutate the internal items array from outside the object
+      const gene = 'Gene';
+      shoppingList.addItem(gene);
 
-    shoppingList.addItem(carrot);
-    expect(log).lastCalledWith(`${carrot} successfully added! Now you have 3 item(s).`);
+      const itemsCopy = shoppingList.getItems();
+      expect(shoppingList.getItems()).toEqual([gene]);
 
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
+      itemsCopy.push('Zo');
+      expect(shoppingList.getItems()).toEqual([gene]);
 
-  test('makeShoppingList.removeItem - removes an item from the items array and returns true', () => {
-    const shoppingList = makeShoppingList();
-    const banana = 'Banana';
-    shoppingList.addItem(banana);
-    const apple = 'Apple';
-    shoppingList.addItem(apple);
-    const carrot = 'Carrot';
-    shoppingList.addItem(carrot);
+      itemsCopy.length = 0;
+      expect(shoppingList.getItems()).toEqual([gene]);
 
-    expect(shoppingList.removeItem(apple)).toBe(true);
-    expect(shoppingList.getItems()).toEqual([banana, carrot]);
+      // only the specified methods should be available
+      expect(Object.keys(shoppingList).length).toBe(3);
 
-    expect(shoppingList.removeItem(banana)).toBe(true);
-    expect(shoppingList.getItems()).toEqual([carrot]);
+      expect(typeof shoppingList.addItem).toBe('function');
+      expect(typeof shoppingList.removeItem).toBe('function');
+      expect(typeof shoppingList.getItems).toBe('function');
 
-    expect(shoppingList.removeItem(carrot)).toBe(true);
-    expect(shoppingList.getItems()).toEqual([]);
-
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
-
-  test('makeShoppingList.removeItem - logs the right message when removing an item in the list that exists', () => {
-    const shoppingList = makeShoppingList();
-    const banana = 'Banana';
-    shoppingList.addItem(banana);
-    shoppingList.removeItem(banana);
-    expect(log).lastCalledWith(`${banana} successfully removed. You now have 1 item(s).`);
-
-    const date = 'Date';
-    shoppingList.addItem(date);
-    shoppingList.removeItem(date);
-    expect(log).lastCalledWith(`${date} successfully removed. You now have 0 item(s).`);
-
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
-
-  test('makeShoppingList.removeItem - logs the right message if an item does not exist and returns false', () => {
-    const shoppingList = makeShoppingList();
-
-    const dennis = 'Dennis';
-    expect(shoppingList.removeItem(dennis)).toBe(false);
-    expect(log).lastCalledWith(`${dennis} not found.`);
-
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
-
-  test('makeShoppingList - does not expose internal items array', () => {
-    const shoppingList = makeShoppingList();
-    expect(shoppingList.items).toBeUndefined();
-
-    // only the specified methods should be available
-    expect(Object.keys(shoppingList).length).toBe(3);
-
-    expect(typeof shoppingList.addItem).toBe('function');
-    expect(typeof shoppingList.removeItem).toBe('function');
-    expect(typeof shoppingList.getItems).toBe('function');
-
-    scoreCounter.correct(expect); // DO NOT TOUCH
-  });
-
-  test('makeShoppingList - is not possible to manipulate the internal items array from outside the object', () => {
-    const shoppingList = makeShoppingList();
-
-    const gene = 'Gene';
-    shoppingList.addItem(gene);
-
-    const outsideitems = shoppingList.getItems();
-    expect(shoppingList.getItems()).toEqual([gene]);
-
-    outsideitems.push('Zo');
-    expect(shoppingList.getItems()).toEqual([gene]);
-
-    outsideitems.length = 0;
-    expect(shoppingList.getItems()).toEqual([gene]);
-
-    scoreCounter.correct(expect); // DO NOT TOUCH
+      scoreCounter.correct(expect); // DO NOT TOUCH
+    });
   });
 
   // IGNORE PLEASE

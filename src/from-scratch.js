@@ -1,7 +1,20 @@
 const makeIdFunc = () => {
+
 };
 
-const sumOfMultiples = (nums, factor) => {
+const makePasswordChecker = (correctPassword) => {
+
+};
+
+const makeMultiplier = (multiplier) => {
+
+};
+
+const makeFilterByLength = (length) => {
+
+};
+
+const makeGradeTracker = () => {
 
 };
 
@@ -11,6 +24,9 @@ const makeShoppingList = () => {
 
 module.exports = {
   makeIdFunc,
-  sumOfMultiples,
+  makePasswordChecker,
+  makeMultiplier,
+  makeFilterByLength,
+  makeGradeTracker,
   makeShoppingList,
 };

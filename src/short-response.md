@@ -15,7 +15,7 @@ For each prompt below, write your response in the space provided. Aim to answer 
 
 What are the core principles of encapsulation in object-oriented programming?
 
-### Response 2
+### Response 1
 
 Your response here...
 
@@ -23,7 +23,7 @@ Your response here...
 
 ## Question 2
 
-### Prompt 1
+### Prompt 2
 
 The code snippet below is an example of a **closure**.
 
@@ -45,7 +45,7 @@ Your response here...
 
 ## Question 3
 
-## Prompt 3
+### Prompt 3
 
 Consider the code snippet below showing a factory function for creating animal objects. The `makeNoise` method is not working as intended:
 

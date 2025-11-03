@@ -5,10 +5,16 @@
   - [Be Okay With Being "Provisionally Complete"](#be-okay-with-being-provisionally-complete)
 - [Setup](#setup)
 - [Short Response Questions](#short-response-questions)
+  - [Prompt 1](#prompt-1)
+  - [Prompt 2](#prompt-2)
+  - [Prompt 3](#prompt-3)
 - [From Scratch](#from-scratch)
   - [Question 1: makeIdFunc](#question-1-makeidfunc)
-  - [Question 2: sumOfMultiples](#question-2-sumofmultiples)
-  - [Question 3: makeShoppingList](#question-3-makeshoppinglist)
+  - [Question 2: makePasswordChecker](#question-2-makepasswordchecker)
+  - [Question 3: makeMultiplier](#question-3-makemultiplier)
+  - [Question 4: makeFilterByLength](#question-4-makefilterbylength)
+  - [Question 5: makeGradeTracker](#question-5-makegradetracker)
+  - [Question 6: makeShoppingList](#question-6-makeshoppinglist)
 - [Debug](#debug)
 - [Good luck!](#good-luck)
 
@@ -60,6 +66,53 @@ git push                # push the new commit to the remote repo
 
 Short response questions can be found in the `src/short-response.md` file. Write your responses directly in that file! Do not forget to complete this part of the assignment.
 
+### Prompt 1
+
+What are the core principles of encapsulation in object-oriented programming?
+
+### Prompt 2
+
+The code snippet below is an example of a **closure**.
+
+```js
+const multiplyNumsBy = (nums, multiplier) => {
+  return nums.map((num) => num * multiplier);
+};
+
+const multiplesOfFive = multiplyNumsBy([1,2,3,4], 5); // [5, 10, 15, 20]
+```
+
+First, define what a **closure** is in your own words and then explain how this example includes a closure.
+
+### Prompt 3
+
+Consider the code snippet below showing a factory function for creating animal objects. The `makeNoise` method is not working as intended:
+
+```js
+const makeAnimal = (name, species, sound) => {
+  const animal = {
+    name: name,
+    species: species,
+    makeNoise: () => {
+      console.log(`${this.name} the ${this.species} says ${sound}`)
+    }
+  }
+  return animal;
+}
+
+const betty = makeAnimal('betty', 'cat', 'meow');
+betty.makeNoise(); // undefined the undefined says meow
+
+const bugs = makeAnimal('bugs', 'bunny', 'whatsup doc');
+bugs.makeNoise(); // undefined the undefined says meow says whatsup doc
+```
+
+First, define the `this` keyword.
+
+Then, explain why the `makeNoise` method is not working (why are `this.name` and `this.species` returning `undefined`?).
+
+Finally, update the code snippet above to fix it.
+
 ## From Scratch
 
 ### Question 1: makeIdFunc
@@ -89,21 +142,97 @@ console.log(idMaker2()); // 3
 
 This is a *classic* closure example, check the tests for what we're expecting.
 
-### Question 2: sumOfMultiples
+### Question 2: makePasswordChecker
 
-Write a function called `sumOfMultiples` that returns the sum of all numbers in the given array `nums`, but only for the numbers that are multiples of the given number `factor`.
-
-No `for` loops allowed: use the appropriate array higher-order method! To pass the tests you cannot have `"for"` or `"while"` anywhere in your code (event comments).
+Create a higher-order function called `makePasswordChecker` that takes a `correctPassword` (string) as an argument and returns an "inner" function with a closure. The returned inner function should:
+* Take a `guess` (string) as an argument
+* Keep track of how many attempts have been made
+* Return `true` if the guess matches the correct password
+* Return `false` if the guess is incorrect
+* After 3 failed attempts, return the string `"Account locked"`
 
 Example Usage:
-
 ```js
-sumOfMultiples([1,2,3,4,5,6,7,8,9], 2); // returns 20 (2 + 4 + 6 + 8)
-sumOfMultiples([1,2,3,4,5,6,7,8,9], 3); // returns 18 (3 + 6 + 9)
-sumOfMultiples([1,2,3,4,5,6,7,8,9], 4); // returns 12 (4 + 8)
+const checkPassword = makePasswordChecker("secret123");
+
+console.log(checkPassword("wrong")); // false
+console.log(checkPassword("incorrect")); // false
+console.log(checkPassword("secret123")); // true
+
+const anotherChecker = makePasswordChecker("pass456");
+console.log(anotherChecker("wrong1")); // false
+console.log(anotherChecker("wrong2")); // false
+console.log(anotherChecker("wrong3")); // false
+console.log(anotherChecker("pass456")); // "Account locked"
 ```
 
-### Question 3: makeShoppingList
+### Question 3: makeMultiplier
+
+Write a function called `makeMultiplier` that takes a number called `multiplier` and returns a function. 
+
+The returned function should:
+* Take an array of numbers as an argument
+* Return a new array with each number multiplied by the `multiplier`
+* Aim to solve this using the `map` method, not a `for` loop!
+
+Example Usage:
+```js
+const double = makeMultiplier(2);
+const triple = makeMultiplier(3);
+
+console.log(double([1, 2, 3, 4])); // [2, 4, 6, 8]
+console.log(triple([1, 2, 3, 4])); // [3, 6, 9, 12]
+console.log(double([5, 10, 15])); // [10, 20, 30]
+```
+
+### Question 4: makeFilterByLength
+
+Write a function called `makeFilterByLength` that takes a number called `maxLength` and returns a function. The returned function should:
+* Take an array of strings as an argument
+* Return a new array containing only the strings that have a length *less than or equal* to `maxLength`
+* Aim to solve this using the `filter` method, not a `for` loop!
+
+Example Usage:
+```js
+const getShorterThan4 = makeFilterByLength(4);
+const getShorterThan6 = makeFilterByLength(6);
+
+const animals = ['cat', 'dog', 'elephant', 'bird', 'llama'];
+console.log(getShorterThan4(animals)); // ['cat', 'dog', 'bird']
+console.log(getShorterThan6(animals)); // ['cat', 'dog', 'bird', 'llama']
+```
+
+### Question 5: makeGradeTracker
+
+Write a "factory" function called `makeGradeTracker()`. 
+* It should return an object that lets you track student grades
+* It should use closure to encapsulate a private `grades` array of numbers. You should NOT be able to directly access `grades`.
+* The returned object should have methods that act on the `grades` array
+
+The methods we need are:
+  - `addGrade(grade)`
+    - add a new grade (a number between 0-100) to the list and returns true
+    - if the grade is not between 0-100, returns false
+  - `getAverage()`
+    - calculate and return the average of all grades (return 0 if there are no grades)
+
+Example Usage:
+```js
+const studentGrades = makeGradeTracker();
+
+console.log(studentGrades.addGrade(90)); // true
+console.log(studentGrades.addGrade(85)); // true
+console.log(studentGrades.addGrade(80)); // true
+
+console.log(studentGrades.getAverage()); // 85
+
+console.log(studentGrades.addGrade(150)); // false
+console.log(studentGrades.getAverage()); // 85 (still the same)
+
+console.log(studentGrades.grades); // undefined
+```
+
+### Question 6: makeShoppingList
 
 Write a "factory" function called `makeShoppingList()`. 
 * It should return an object that lets you manage a shopping list
